@@ -1,0 +1,2 @@
+var figlet = require(\'figlet\'); figlet.textSync('hello', {horizontalLayout:\'full'});
+var figlet = require(\'figlet\'); figlet.textSync('hello', {horizontalLayout:\'full'});
