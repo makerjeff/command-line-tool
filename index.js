@@ -42,17 +42,16 @@ console.log(
 );
 
 // check to see if current folder is a Git folder using our helper method.
-if (files.directoryExists('.git')){
-    console.log(chalk.red('Already a git repository!'));
-    process.exit();
-}
+// if (files.directoryExists('.git')){
+//     console.log(chalk.red('Already a git repository!'));
+//     process.exit();
+//}
 
 // prompt user for input using "Inquirer"
-//TODO
+//TODO: Prompt user for folder project name and initialize a JWX folder structure.
 
-// getGithubCredentials(function(){
-//     console.log(arguments);
-// });
+spinMyWheels(process.argv[2]);
+
 
 // ====================================
 // FUNCTIONS ==========================
@@ -133,4 +132,18 @@ function getGithubToken(callback){
         });
 
     });
+}
+
+function spinMyWheels(time){
+
+    var status = new Spinner('Loading some stuff...');
+    status.start();
+
+    var tickerTimer = setTimeout(function(){
+
+        status.stop();
+        console.log('\r\n' + chalk.green(time) + ' millisecond timer, timed out.');
+
+    }, time);
+
 }
