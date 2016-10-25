@@ -37,7 +37,7 @@ clear();
 
 // write title using figlet and chalk.
 console.log(
-    chalk.yellow(figlet.textSync('Ginit', {horizontalLayout: 'full'})
+    chalk.yellow(figlet.textSync(getRandomAppName(), {horizontalLayout: 'full'})
     )
 );
 
@@ -50,13 +50,98 @@ console.log(
 // prompt user for input using "Inquirer"
 //TODO: Prompt user for folder project name and initialize a JWX folder structure.
 
-spinMyWheels(process.argv[2]);
+//fake loading spinner
+//spinMyWheels(process.argv[2]);
+
+//run app
+askQuestions(function(){console.log(arguments)});
 
 
 // ====================================
 // FUNCTIONS ==========================
 // ====================================
 
+/**
+ * Loading Wheel Spinner
+ * @param time How long in milliseconds to test the spinner.
+ */
+function spinMyWheels(time){
+
+    var status = new Spinner('Loading some stuff...');
+    status.start();
+
+    var tickerTimer = setTimeout(function(){
+
+        status.stop();
+        console.log('\r\n' + chalk.green(time) + ' millisecond timer, timed out.');
+
+    }, time);
+
+}
+
+/**
+ * Generate a random app name from a private list of names.
+ * @returns {string} Returns a name as a string value.
+ */
+function getRandomAppName(){
+
+    //TODO: add a file reader
+    var listONames = [
+        'Ginit', 'Jeffit', 'Loco-it', 'Brunch Jog', 'MonoSpacer', 'JimboJones', '180LA'
+    ];
+    return listONames[Math.floor(Math.random() * listONames.length)];
+}
+
+/**
+ * Ask input questions.
+ * @param callback Function to run after all data is collected.
+ */
+function askQuestions(callback){
+
+    //check for prefs
+
+    var questions = [
+        {
+            name:'username',
+            type:'input',
+            message: 'Enter your username: ',
+            validate: function(value){
+                if(value.length){
+                    return true;
+                } else {
+                    return 'Please enter your username. ';
+                }
+            }
+        },
+        {
+            name:'password',
+            type:'password',
+            message:'Enter your password: ',
+            validate:function(value){
+                if(value.length){
+                    return true;
+                } else {
+                    return 'Please enter your password';
+                }
+            }
+        }
+    ];
+
+    inquirer.prompt(questions).then(callback);
+}
+
+function checkForExistingPrefs(){
+    var prefs = new Preferences('ginit');
+
+    if (prefs.github && prefs.github.token) {
+        return callback(null, prefs.github.token);
+        //TODO: study this method of setting up callbacks (param passed in to function that called this function?)
+    }
+}
+
+// =============================================================
+// ============= REFERENCE FUNCTIONS FROM TUTORIAL =============
+// =============================================================
 function getGithubCredentials(callback){
 
     // set of questions
@@ -132,18 +217,4 @@ function getGithubToken(callback){
         });
 
     });
-}
-
-function spinMyWheels(time){
-
-    var status = new Spinner('Loading some stuff...');
-    status.start();
-
-    var tickerTimer = setTimeout(function(){
-
-        status.stop();
-        console.log('\r\n' + chalk.green(time) + ' millisecond timer, timed out.');
-
-    }, time);
-
 }
